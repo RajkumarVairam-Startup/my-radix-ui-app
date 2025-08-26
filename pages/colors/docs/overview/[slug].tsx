@@ -45,7 +45,7 @@ export async function getStaticPaths() {
 
 	return {
 		paths: frontmatters.map((frontmatter) => ({
-			params: { slug: frontmatter.slug.replace("colors/docs/overview/", "") },
+			params: { slug: frontmatter.slug },
 		})),
 		fallback: false,
 	};

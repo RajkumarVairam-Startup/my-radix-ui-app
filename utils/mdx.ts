@@ -24,9 +24,13 @@ export const getAllFrontmatter = (fromPath: string) => {
 			const source = fs.readFileSync(path.join(filePath), "utf8");
 			const { data, content } = matter(source);
 
+			// Use path.basename to extract just the filename without extension
+			// This is more reliable than string replacements and handles Windows paths correctly
+			const slug = path.basename(filePath, '.mdx');
+
 			return {
 				...(data as Frontmatter),
-				slug: filePath.replace(`${DATA_PATH}/`, "").replace(".mdx", ""),
+				slug,
 			} as Frontmatter;
 		})
 		.sort(
@@ -36,8 +40,12 @@ export const getAllFrontmatter = (fromPath: string) => {
 };
 
 export const getMdxBySlug = async (basePath: string, slug: string) => {
+	// Normalize path separators for cross-platform compatibility
+	const normalizedBasePath = basePath.replace(/\\/g, '/');
+	const normalizedSlug = slug.replace(/\\/g, '/');
+	
 	const source = fs.readFileSync(
-		path.join(DATA_PATH, basePath, `${slug}.mdx`),
+		path.join(DATA_PATH, normalizedBasePath, `${normalizedSlug}.mdx`),
 		"utf8",
 	);
 	const { frontmatter, code } = await bundleMDX({

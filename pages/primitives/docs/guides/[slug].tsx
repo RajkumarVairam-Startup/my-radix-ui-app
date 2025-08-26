@@ -42,7 +42,7 @@ export async function getStaticPaths() {
 
 	return {
 		paths: frontmatters.map((frontmatter) => ({
-			params: { slug: frontmatter.slug.replace("primitives/docs/guides/", "") },
+			params: { slug: frontmatter.slug },
 		})),
 		fallback: false,
 	};
